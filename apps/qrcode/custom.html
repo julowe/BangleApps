@@ -347,8 +347,8 @@
             var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
 		console.log("output of var img:")
 		console.log(img)
-		console.log("otuput of raw imgcon")
-		console.log(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true}))
+		console.log("otuput of raw imgcon and bToA")
+		console.log(btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true})))
             var app = `const storage = require('Storage');
 var qrData = storage.readJSON('qrcode.json', 1);
 var img = ${img};
