@@ -381,8 +381,7 @@ var userSettings = `{"description":${JSON.stringify(qrDescription)}, "qrCodeImgS
 
             sendCustomizedApp({
                 storage:[
-		    {name:"qrcode.app.js", url:"app.js", content:app},
-		    {name:"qrcode.json", url:"qrcode.json", content:userSettings},
+		    {name:"qrcode.json", url:"qrcode.json", content:userSettings}
 		]
             });
 
