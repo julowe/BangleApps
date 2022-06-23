@@ -346,13 +346,13 @@
                 content = document.getElementById("description").value;
             }
             var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
-            var imgStr = btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true}))
+            var imgStr = btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true}));
+		console.log(document.getElementById("boostBacklight").checked);
+		console.log(document.getElementById("boostBacklight").checked ? 'Bangle.setLCDBrightness(1);' : '');
             var app = `const storage = require('Storage');
-const userFunction = require('qrcode.img.js');
 var qrData = storage.readJSON('qrcode.json', 1);
 var img = eval(qrData.imgTest);
 var imgTest = require("heatshrink").decompress(atob(qrData.qrCodeImg));
-var imgTest2 = userFunction.returnStoredQRCode();
 ${ document.getElementById("preventBrightnessChangeOnTouch").checked ? '' : `var backlight = 0;
 Bangle.on('touch', function(button, xy) {
   backlight += 0.3;
@@ -375,16 +375,11 @@ g.setColor(1,1,1);
 
             var userSettings = `{"description":${JSON.stringify(content)}, "qrCodeImg":${JSON.stringify(imgStr)}, "imgTest":${JSON.stringify(img)}}`;
 
-            var userJSFile = `function returnStoredQRCode() {
-return ${JSON.stringify(img)};
-}`;
-
                 //"qrCodeImg":${img}
 
             sendCustomizedApp({
                 storage:[
 		    {name:"qrcode.app.js", url:"app.js", content:app},
-		    {name:"qrcode.img.js", url:"qrcode.img.js", content:userJSFile},
 		    {name:"qrcode.json", url:"qrcode.json", content:userSettings},
 		]
             });
