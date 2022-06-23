@@ -345,14 +345,12 @@
             if(!(document.getElementById("description").value === "")){
                 content = document.getElementById("description").value;
             }
-            var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
+            //var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
+            // eval(qrData.img); does work, as quick as previous way, but I don't love using eval(), so going to hack the string apart a bit, see next line
             var imgStr = btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true}));
-		console.log(document.getElementById("boostBacklight").checked);
-		console.log(document.getElementById("boostBacklight").checked ? 'Bangle.setLCDBrightness(1);' : '');
             var app = `const storage = require('Storage');
 var qrData = storage.readJSON('qrcode.json', 1);
-var img = eval(qrData.imgTest);
-var imgTest = require("heatshrink").decompress(atob(qrData.qrCodeImg));
+var qrImg = require("heatshrink").decompress(atob(qrData.qrCodeImgStr));
 ${ document.getElementById("preventBrightnessChangeOnTouch").checked ? '' : `var backlight = 0;
 Bangle.on('touch', function(button, xy) {
   backlight += 0.3;
@@ -366,16 +364,14 @@ ${document.getElementById("stayOn").checked ? 'Bangle.setLCDTimeout(0);' : ''}
 ${document.getElementById("hideDescription").checked ? '' : `var content = ${JSON.stringify(content)};`}
 g.clear(1).setColor(1,1,1).setBgColor(0,0,0);
 g.fillRect(0,0,g.getWidth()-1,g.getHeight()-1);
-g.drawImage(img,(g.getWidth()-img[0])/2,(g.getHeight()-img[1])/2);
+g.drawImage(qrImg,(g.getWidth()-qrImg[0])/2,(g.getHeight()-qrImg[1])/2);
 ${ document.getElementById("hideDescription").checked ? '' : `g.setFontAlign(0,0).setFont("6x8").setColor(0,0,0);
-g.drawString(qrData.description,g.getWidth()/2,g.getHeight()-(g.getHeight()-img[1])/4);
+g.drawString(qrData.description,g.getWidth()/2,g.getHeight()-(g.getHeight()-qrImg[1])/4);
 `}
 g.setColor(1,1,1);
 `;
 
-            var userSettings = `{"description":${JSON.stringify(content)}, "qrCodeImg":${JSON.stringify(imgStr)}, "imgTest":${JSON.stringify(img)}}`;
-
-                //"qrCodeImg":${img}
+var userSettings = `{"description":${JSON.stringify(content)}, "qrCodeImgStr":${JSON.stringify(imgStr)}, "preventBrightnessChangeOnTouch":${document.getElementById("preventBrightnessChangeOnTouch").checked}, "boostBacklight":${document.getElementById("boostBacklight").checked}, "stayOn":${document.getElementById("stayOn").checked}, "hideDescription":${document.getElementById("hideDescription").checked}}`;
 
             sendCustomizedApp({
                 storage:[
