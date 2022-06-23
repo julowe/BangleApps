@@ -4,4 +4,4 @@
 0.04: Allow scanning of QR codes from camera or file
 0.05: Change brightness on touch
 0.06: Add ability to generate contact info (MeCard format) QR code
-0.07: Load test string from storage
+0.07: Load test string from storage and write html string to storage
