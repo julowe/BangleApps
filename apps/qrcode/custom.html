@@ -345,15 +345,11 @@
                 content = document.getElementById("description").value;
             }
             var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
-		console.log("output of var img:")
-		console.log(img)
-		console.log("otuput of raw imgcon and bToA")
-		console.log(btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true})))
             var imgStr = btoa(imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"raw",compression:true}))
             var app = `const storage = require('Storage');
 var qrData = storage.readJSON('qrcode.json', 1);
 var img = ${img};
-var imgTest = require("heatshrink").decompress(atob(${imgStr}));
+var imgTest = require("heatshrink").decompress(atob(qrData.qrCodeImg));
 ${ document.getElementById("preventBrightnessChangeOnTouch").checked ? '' : `var backlight = 0;
 Bangle.on('touch', function(button, xy) {
   backlight += 0.3;
@@ -375,8 +371,10 @@ g.setColor(1,1,1);
 `;
 
             var userSettings = `{
-                "description":${JSON.stringify(content)}
-                "qrCodeImg":${imgStr}
+                "description":${JSON.stringify(content)},
+                "qrCodeImg":"${imgStr}",
+                "qrCodeImgTest":${JSON.stringify(imgStr)},
+                "imgTest":${JSON.stringify(img)}
 	    }`;
                 //"qrCodeImg":${img}
 
