@@ -351,16 +351,22 @@
             var app = `const storage = require('Storage');
 var qrData = storage.readJSON('qrcode.json', 1);
 var qrImg = require("heatshrink").decompress(atob(qrData.qrCodeImgStr));
-${ document.getElementById("preventBrightnessChangeOnTouch").checked ? '' : `var backlight = 0;
-Bangle.on('touch', function(button, xy) {
-  backlight += 0.3;
-  if (backlight > 1) backlight = 0;
-  Bangle.setLCDBrightness(backlight);
-});
-`}
+var backlight = 0;
+if (!qrData.preventBrightnessChangeOnTouch) {
+  Bangle.on('touch', function(button, xy) {
+    backlight += 0.3;
+    if (backlight > 1) backlight = 0;
+    Bangle.setLCDBrightness(backlight);
+  });
+}
 
-${document.getElementById("boostBacklight").checked ? 'Bangle.setLCDBrightness(1);' : ''}
-${document.getElementById("stayOn").checked ? 'Bangle.setLCDTimeout(0);' : ''}
+
+if (qrData.boostBacklight) {
+  Bangle.setLCDBrightness(1);
+}
+if (qrData.stayOn) {
+  Bangle.setLCDTimeout(0);
+}
 g.clear(1).setColor(1,1,1).setBgColor(0,0,0);
 g.fillRect(0,0,g.getWidth()-1,g.getHeight()-1);
 g.drawImage(qrImg,(g.getWidth()-qrImg[0])/2,(g.getHeight()-qrImg[1])/2);
