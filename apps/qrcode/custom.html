@@ -368,7 +368,10 @@ g.drawString(qrData.description,g.getWidth()/2,g.getHeight()-(g.getHeight()-img[
 g.setColor(1,1,1);
 `;
 
-            var userSettings = `{"description":${JSON.stringify(content)}}`;
+            var userSettings = `{
+                "description":${JSON.stringify(content)},
+                "qrCodeImg":${img}
+	    }`;
 
             sendCustomizedApp({
                 storage:[
