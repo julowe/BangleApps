@@ -4,4 +4,4 @@
 0.04: Allow scanning of QR codes from camera or file
 0.05: Change brightness on touch
 0.06: Add ability to generate contact info (MeCard format) QR code
-0.07: Load test string from storage and write html string to storage
+0.07: No user facing changes. custom.html now only sends a json file with settings and qrcode, app code is now static and reads from that json file
