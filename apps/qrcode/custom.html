@@ -345,6 +345,8 @@
                 content = document.getElementById("description").value;
             }
             var img = imageconverter.canvastoString(document.getElementsByTagName("canvas")[0],{mode:"1bit",output:"string",compression:true});
+		console.log("test")
+		console.log(img)
             var app = `const storage = require('Storage');
 var qrData = storage.readJSON('qrcode.json', 1);
 var img = ${img};
